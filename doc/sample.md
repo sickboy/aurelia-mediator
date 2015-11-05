@@ -14,12 +14,13 @@ class GetUserProfile extend Query<IUserProfile> {
 
 @handlerFor(GetUserProfile)
 @inject(DbContext)
-class GetUserProfileHandler extends IRequestHandler<GetUserProfile> {
+class GetUserProfileHandler extends IRequestHandler<GetUserProfile, IUserProfile> {
    constructor(private dbContext: DbContext) {}
-   async handle(request: GetUserProfile): Promise<IUserProfile> {
-       var result = await this.dbContext.users.firstOrThrow(request.userId);
-      return { id: result.id, userName: result.userName, birthday: result.birthday }
-      }
+
+   async handle(request: GetUserProfile) {
+     let result = await this.dbContext.users.firstOrThrow(request.userId);
+     return { id: result.id, userName: result.userName, birthday: result.birthday }
+   }
 }
 ~~~
 
@@ -30,6 +31,7 @@ import {Mediator} from 'aurelia-mediator';
 @inject(Mediator)
 class UserProfile {
     constructor(private mediator: Mediator) {}
+
     async activate(params, config) {
       this.model = await new GetUserProfile(params.userId).handle(this.mediator);
     }
