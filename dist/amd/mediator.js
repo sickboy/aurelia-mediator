@@ -11,6 +11,8 @@ define(["exports", "aurelia-dependency-injection"], function (exports, _aureliaD
     var Request = (function () {
         function Request() {
             _classCallCheck(this, Request);
+
+            this.isReadOnly = false;
         }
 
         Request.prototype.handle = function handle(mediator) {
@@ -28,7 +30,12 @@ define(["exports", "aurelia-dependency-injection"], function (exports, _aureliaD
         function Query() {
             _classCallCheck(this, Query);
 
-            _Request.apply(this, arguments);
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
+            }
+
+            _Request.call.apply(_Request, [this].concat(args));
+            this.isReadOnly = true;
         }
 
         return Query;
@@ -84,8 +91,8 @@ define(["exports", "aurelia-dependency-injection"], function (exports, _aureliaD
 
     Mediator.registry = {};
     function logError() {
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
+        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+            args[_key2] = arguments[_key2];
         }
 
         if (console && console.error) console.error.apply(console, args);

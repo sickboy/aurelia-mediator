@@ -1,6 +1,7 @@
 declare module "aurelia-mediator" {
   export interface IRequest<T> {
       handle(mediator: IMediator): Promise<T>;
+      isReadOnly: boolean;
   }
   export interface IQuery<T> extends IRequest<T> {
   }
@@ -8,10 +9,17 @@ declare module "aurelia-mediator" {
   }
   export interface IVoidCommand extends ICommand<void> {
   }
-  export class Request<T> implements IRequest<T> {
+  export interface IRequestHandler<TRequest, TResponse> {
+      handle(request: TRequest): Promise<TResponse>;
+  }
+  export interface IVoidCommandHandler extends IRequestHandler<IVoidCommand, void> {
+  }
+  export abstract class Request<T> implements IRequest<T> {
+      isReadOnly: boolean;
       handle(mediator: IMediator): Promise<T>;
   }
   export class Query<T> extends Request<T> implements IQuery<T> {
+      isReadOnly: boolean;
   }
   export class Command<T> extends Request<T> implements ICommand<T> {
   }

@@ -1,10 +1,15 @@
 import { Container } from 'aurelia-dependency-injection';
 export class Request {
-    handle(mediator) {
-        return mediator.request(this);
+    constructor() {
+        this.isReadOnly = false;
     }
+    handle(mediator) { return mediator.request(this); }
 }
 export class Query extends Request {
+    constructor(...args) {
+        super(...args);
+        this.isReadOnly = true;
+    }
 }
 export class Command extends Request {
 }
