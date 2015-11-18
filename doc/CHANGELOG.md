@@ -1,3 +1,6 @@
+### 0.0.6 (2015-11-18)
+
+
 ### 0.0.3 (2015-11-05)
 
 * Added interfaces for IRequestHandler and IVoidCommandHandler
