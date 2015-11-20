@@ -28,7 +28,7 @@ export interface IMediator {
     request<T>(request: IRequest<T>): Promise<T>;
 }
 export declare class Mediator implements IMediator {
-    static registry: {};
+    static registry: Map<any, any>;
     request<T>(request: IRequest<T>): Promise<T>;
 }
 export declare function registerRequest(request: any, handler: any): void;
