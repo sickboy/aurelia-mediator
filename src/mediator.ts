@@ -49,6 +49,7 @@ function logError(...args) {
 }
 
 export function registerRequest(request, handler) {
+  if (request === handler) throw new Error("You can't register request === handler");
   //Tk.Debug.log("$$$ register", request, handler);
   Container.instance.registerSingleton(handler);
   request.handler = handler;
