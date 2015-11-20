@@ -32,5 +32,6 @@ declare module "aurelia-mediator" {
       static registry: {};
       request<T>(request: IRequest<T>): Promise<T>;
   }
-  export function handlerFor(request: any): (target: any) => void;
+  export function registerRequest(request: any, handler: any): any;
+  export function handlerFor(request: any): any;
 }

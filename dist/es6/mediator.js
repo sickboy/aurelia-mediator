@@ -30,28 +30,15 @@ function logError(...args) {
     if (console && console.error)
         console.error.apply(console, args);
 }
-function registerExternalCommand(command, handler) {
+export function registerRequest(request, handler) {
+    //Tk.Debug.log("$$$ register", request, handler);
     Container.instance.registerSingleton(handler);
-    if (Mediator.registry[command]) {
-        logError("Command already has a handler assigned: ", command, Mediator.registry[command]);
-    }
-    Mediator.registry[command] = handler;
+    request.handler = handler;
+    if (Mediator.registry[request])
+        logError("Request already has a handler assigned: ", request, Mediator.registry[request]);
+    Mediator.registry[request] = handler;
 }
-// has to come before inject, so that is executed after :S!
 export function handlerFor(request) {
-    return function (target) {
-        var command = request;
-        if (target.inject)
-            target.$inject = target.inject;
-        if (!target.$inject) {
-            throw "$inject missing!";
-        }
-        //Tk.Debug.log("$$$ deco", target, command, target.$name, command.$name, target.inject);
-        if (target.handlerFor != null) {
-            logError("Target already has a handler assigned: ", target, target.handlerFor);
-        }
-        target.handlerFor = command;
-        registerExternalCommand(target.handlerFor, target);
-    };
+    return target => registerRequest(request, target);
 }
 //# sourceMappingURL=mediator.js.map

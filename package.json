@@ -1,6 +1,6 @@
 {
   "name": "aurelia-mediator",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A Mediator implementation for Aurelia.",
   "keywords": [
     "aurelia",
@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "author": "Patrick Roza <p.roza@outlook.com>",
-  "main": "dist/commonjs/index.js",
+  "main": "dist/commonjs/mediator.js",
   "repository": {
     "type": "git",
     "url": "http://github.com/sickboy/aurelia-mediator"
@@ -48,7 +48,7 @@
     "yargs": "^2.1.1"
   },
   "jspm": {
-    "main": "index",
+    "main": "mediator",
     "format": "amd",
     "directories": {
       "lib": "dist/amd"

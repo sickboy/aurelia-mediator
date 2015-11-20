@@ -2,6 +2,7 @@ define(["exports", "aurelia-dependency-injection"], function (exports, _aureliaD
     "use strict";
 
     exports.__esModule = true;
+    exports.registerRequest = registerRequest;
     exports.handlerFor = handlerFor;
 
     function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -97,27 +98,17 @@ define(["exports", "aurelia-dependency-injection"], function (exports, _aureliaD
 
         if (console && console.error) console.error.apply(console, args);
     }
-    function registerExternalCommand(command, handler) {
+
+    function registerRequest(request, handler) {
         _aureliaDependencyInjection.Container.instance.registerSingleton(handler);
-        if (Mediator.registry[command]) {
-            logError("Command already has a handler assigned: ", command, Mediator.registry[command]);
-        }
-        Mediator.registry[command] = handler;
+        request.handler = handler;
+        if (Mediator.registry[request]) logError("Request already has a handler assigned: ", request, Mediator.registry[request]);
+        Mediator.registry[request] = handler;
     }
 
     function handlerFor(request) {
         return function (target) {
-            var command = request;
-            if (target.inject) target.$inject = target.inject;
-            if (!target.$inject) {
-                throw "$inject missing!";
-            }
-
-            if (target.handlerFor != null) {
-                logError("Target already has a handler assigned: ", target, target.handlerFor);
-            }
-            target.handlerFor = command;
-            registerExternalCommand(target.handlerFor, target);
+            return registerRequest(request, target);
         };
     }
 });
