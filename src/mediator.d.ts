@@ -31,4 +31,5 @@ export declare class Mediator implements IMediator {
     static registry: {};
     request<T>(request: IRequest<T>): Promise<T>;
 }
+export declare function registerRequest(request: any, handler: any): void;
 export declare function handlerFor(request: any): (target: any) => void;
