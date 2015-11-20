@@ -79,8 +79,9 @@ var Mediator = (function () {
     }
 
     Mediator.prototype.request = function request(_request) {
-        if (Mediator.registry[_request.constructor]) {
-            var handler = _aureliaDependencyInjection.Container.instance.get(Mediator.registry[_request.constructor]);
+        var cstr = _request.constructor;
+        if (Mediator.registry.has(cstr)) {
+            var handler = _aureliaDependencyInjection.Container.instance.get(Mediator.registry.get(cstr));
             return handler.handle(_request);
         }
         throw "no handler registered for this request";
@@ -91,7 +92,7 @@ var Mediator = (function () {
 
 exports.Mediator = Mediator;
 
-Mediator.registry = {};
+Mediator.registry = new Map();
 function logError() {
     for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
         args[_key2] = arguments[_key2];
@@ -101,10 +102,12 @@ function logError() {
 }
 
 function registerRequest(request, handler) {
+    if (request === handler) throw new Error("You can't register request === handler");
+
+    if (Mediator.registry.has(request)) logError("Request already has a handler assigned: ", request, Mediator.registry.get(request));
     _aureliaDependencyInjection.Container.instance.registerSingleton(handler);
     request.handler = handler;
-    if (Mediator.registry[request]) logError("Request already has a handler assigned: ", request, Mediator.registry[request]);
-    Mediator.registry[request] = handler;
+    Mediator.registry.set(request, handler);
 }
 
 function handlerFor(request) {

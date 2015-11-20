@@ -20,10 +20,12 @@ System.register(["aurelia-dependency-injection"], function (_export) {
     }
 
     function registerRequest(request, handler) {
+        if (request === handler) throw new Error("You can't register request === handler");
+
+        if (Mediator.registry.has(request)) logError("Request already has a handler assigned: ", request, Mediator.registry.get(request));
         Container.instance.registerSingleton(handler);
         request.handler = handler;
-        if (Mediator.registry[request]) logError("Request already has a handler assigned: ", request, Mediator.registry[request]);
-        Mediator.registry[request] = handler;
+        Mediator.registry.set(request, handler);
     }
 
     function handlerFor(request) {
@@ -106,8 +108,9 @@ System.register(["aurelia-dependency-injection"], function (_export) {
                 }
 
                 Mediator.prototype.request = function request(_request) {
-                    if (Mediator.registry[_request.constructor]) {
-                        var handler = Container.instance.get(Mediator.registry[_request.constructor]);
+                    var cstr = _request.constructor;
+                    if (Mediator.registry.has(cstr)) {
+                        var handler = Container.instance.get(Mediator.registry.get(cstr));
                         return handler.handle(_request);
                     }
                     throw "no handler registered for this request";
@@ -118,7 +121,7 @@ System.register(["aurelia-dependency-injection"], function (_export) {
 
             _export("Mediator", Mediator);
 
-            Mediator.registry = {};
+            Mediator.registry = new Map();
         }
     };
 });
