@@ -1,6 +1,6 @@
 {
   "name": "aurelia-mediator",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A Mediator implementation for Aurelia.",
   "keywords": [
     "aurelia",
@@ -22,6 +22,7 @@
     "babel-dts-generator": "^0.3.1",
     "conventional-changelog": "0.0.11",
     "del": "^1.1.0",
+    "dts-bundle": "^0.3.0",
     "gulp": "^3.8.10",
     "gulp-babel": "^5.1.0",
     "gulp-bump": "^0.1.13",
@@ -46,6 +47,9 @@
     "through2": "^2.0.0",
     "vinyl-paths": "^1.0.0",
     "yargs": "^2.1.1"
+  },
+  "typescript": {
+    "definition": "dist/aurelia-mediator.d.ts"
   },
   "jspm": {
     "main": "index",
