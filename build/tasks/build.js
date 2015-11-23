@@ -11,28 +11,9 @@ var rename = require('gulp-rename');
 var tools = require('aurelia-tools');
 var del = require('del');
 var vinylPaths = require('vinyl-paths');
+var fs = require('fs');
 
 var jsName = paths.packageName + '.js';
-
-gulp.task('build-index', function(){
-  var importsToAdd = [];
-
-  return gulp.src([
-    paths.root + '*.js',
-    paths.root + '**/*.js',
-   '!' + paths.root + 'index.js',
-   '!' + paths.root + 'resources/*.js'])
-    .pipe(through2.obj(function(file, enc, callback) {
-      file.contents = new Buffer(tools.extractImports(file.contents.toString("utf8"), importsToAdd));
-      this.push(file);
-      return callback();
-    }))
-    .pipe(concat(jsName))
-    .pipe(insert.transform(function(contents) {
-      return tools.createImportBlock(importsToAdd) + contents;
-    }))
-    .pipe(to5(assign({}, compilerOptions, {modules:'common'})));
-});
 
 gulp.task('build-es6', function () {
   return gulp.src(paths.source)
@@ -57,29 +38,74 @@ gulp.task('build-system', function () {
     .pipe(gulp.dest(paths.output + 'system'));
 });
 
-gulp.task('build-dts', function(){
-  var tdsPath = paths.output + paths.packageName + '/' + paths.packageName + '.d.ts';
-  return gulp.src(tdsPath)
-      .pipe(rename(paths.packageName + '.d.ts'))
-      .pipe(gulp.dest(paths.output + 'es6'))
-      .pipe(gulp.dest(paths.output + 'commonjs'))
-      .pipe(gulp.dest(paths.output + 'amd'))
-      .pipe(gulp.dest(paths.output + 'system'));
-});
+gulp.task('build-dts', function() {
+  var os = require('os');
 
-gulp.task('remove-dts-folder', function() {
-    var tdsFolder = paths.output + paths.packageName;
-    return gulp.src([tdsFolder])
-      .pipe(vinylPaths(del));
-});
+  var opts = {
+
+      // Required
+
+      // name of module likein package.json
+      // - used to declare module & import/require
+      name: 'aurelia-mediator',
+      // path to entry-point (generated .d.ts file for main module)
+      // - either relative or absolute
+      main: 'src/index.d.ts',
+
+      // Optional
+
+      // base directory to be used for discovering type declarations (i.e. from this project itself)
+      // - default: dirname of main
+      baseDir: 'src',
+      // path of output file
+      // - default: "<baseDir>/<name>.d.ts"
+      out: '../dist/aurelia-mediator.d.ts',
+      // include typings outside of the 'baseDir' (i.e. like node.d.ts)
+      // - default: false
+      externals: false,
+      // filter to exclude typings, either a RegExp or a callback. match path relative to opts.baseDir
+      // - RegExp: a match excludes the file
+      // - function: (file:String, external:Boolean) return true to exclude, false to allow
+      // - always use forward-slashes (even on Windows)
+      // - default: *pass*
+      exclude: /^defs\/$/,
+      // delete all source typings (i.e. "<baseDir>/**/*.d.ts")
+      // - default: false
+      removeSource: false,
+      // newline to use in output file
+      newline: os.EOL,
+      // indentation to use in output file
+      // - default 4 spaces
+      indent: '   ',
+      // prefix for rewriting module names
+      // - default '__'
+      prefix: '__',
+      // separator for rewriting module 'path' names
+      // - default: forward slash (like sub-modules)
+      separator: '/',
+      // enable verbose mode, prints detailed info about all references and includes/excludes
+      // - default: false
+      verbose: false,
+  };
+
+  // require module
+  var dts = require('dts-bundle');
+
+  // run it
+  dts.bundle(opts);
+  var dtsFile = 'aurelia-mediator.d.ts';
+  fs.createReadStream('dist/' + dtsFile).pipe(fs.createWriteStream('dist/es6/' + dtsFile));
+  fs.createReadStream('dist/' + dtsFile).pipe(fs.createWriteStream('dist/system/' + dtsFile));
+  fs.createReadStream('dist/' + dtsFile).pipe(fs.createWriteStream('dist/amd/' + dtsFile));
+  fs.createReadStream('dist/' + dtsFile).pipe(fs.createWriteStream('dist/commonjs/' + dtsFile));
+})
+
 
 gulp.task('build', function(callback) {
   return runSequence(
     'clean',
     ['build-es6', 'build-commonjs', 'build-amd', 'build-system'],
-    'build-index',
     'build-dts',
-    'remove-dts-folder',
     callback
   );
 });
