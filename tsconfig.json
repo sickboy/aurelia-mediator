@@ -34,6 +34,12 @@
         "jspm_packages/npm/aurelia-path@1.0.0-beta.1/aurelia-path.d.ts",
         "jspm_packages/npm/aurelia-task-queue@1.0.0-beta.1/aurelia-task-queue.d.ts",
         "jspm_packages/npm/aurelia-templating@1.0.0-beta.1/aurelia-templating.d.ts",
+        "node_modules/dts-bundle/typings/bundle.d.ts",
+        "node_modules/dts-bundle/typings/detect-indent/detect-indent.d.ts",
+        "node_modules/dts-bundle/typings/glob/glob.d.ts",
+        "node_modules/dts-bundle/typings/minimatch/minimatch.d.ts",
+        "node_modules/dts-bundle/typings/mkdirp/mkdirp.d.ts",
+        "node_modules/dts-bundle/typings/node/node.d.ts",
         "typings/es6.d.ts"
     ],
     "exclude": []
