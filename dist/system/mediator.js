@@ -21,9 +21,7 @@ System.register(["aurelia-dependency-injection"], function (_export) {
 
     function registerRequest(request, handler) {
         if (request === handler) throw new Error("You can't register request === handler");
-
         if (Mediator.registry.has(request)) logError("Request already has a handler assigned: ", request, Mediator.registry.get(request));
-        Container.instance.registerSingleton(handler);
         request.handler = handler;
         Mediator.registry.set(request, handler);
     }
@@ -113,7 +111,7 @@ System.register(["aurelia-dependency-injection"], function (_export) {
                         var handler = Container.instance.get(Mediator.registry.get(cstr));
                         return handler.handle(_request);
                     }
-                    throw "no handler registered for this request";
+                    throw new Error("no handler registered for this request");
                 };
 
                 return Mediator;

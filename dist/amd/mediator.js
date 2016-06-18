@@ -83,7 +83,7 @@ define(["exports", "aurelia-dependency-injection"], function (exports, _aureliaD
                 var handler = _aureliaDependencyInjection.Container.instance.get(Mediator.registry.get(cstr));
                 return handler.handle(_request);
             }
-            throw "no handler registered for this request";
+            throw new Error("no handler registered for this request");
         };
 
         return Mediator;
@@ -102,9 +102,7 @@ define(["exports", "aurelia-dependency-injection"], function (exports, _aureliaD
 
     function registerRequest(request, handler) {
         if (request === handler) throw new Error("You can't register request === handler");
-
         if (Mediator.registry.has(request)) logError("Request already has a handler assigned: ", request, Mediator.registry.get(request));
-        _aureliaDependencyInjection.Container.instance.registerSingleton(handler);
         request.handler = handler;
         Mediator.registry.set(request, handler);
     }
