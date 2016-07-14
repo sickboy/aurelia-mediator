@@ -58,8 +58,8 @@
       "lib": "dist/amd"
     },
     "dependencies": {
-      "aurelia-dependency-injection": "npm:aurelia-dependency-injection@^1.0.0-beta.1",
-      "aurelia-framework": "npm:aurelia-framework@^1.0.0-beta.1"
+      "aurelia-dependency-injection": "^1.0.0-rc.1.0.1",
+      "aurelia-framework": "^1.0.0-rc.1.0.2",
     },
     "devDependencies": {
       "traceur": "github:jmcriffey/bower-traceur@0.0.92",
