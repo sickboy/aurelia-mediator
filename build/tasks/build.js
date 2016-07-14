@@ -51,6 +51,7 @@ gulp.task('build-dts', function() {
       // path to entry-point (generated .d.ts file for main module)
       // - either relative or absolute
       main: 'src/index.d.ts',
+      outputAsModuleFolder: true,
 
       // Optional
 
