@@ -17,6 +17,7 @@
     "type": "git",
     "url": "http://github.com/sickboy/aurelia-mediator"
   },
+  "typings": "dist/aurelia-mediator.d.ts",
   "devDependencies": {
     "aurelia-tools": "^0.1.3",
     "babel-dts-generator": "^0.3.1",
