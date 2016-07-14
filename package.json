@@ -59,7 +59,7 @@
     },
     "dependencies": {
       "aurelia-dependency-injection": "^1.0.0-rc.1.0.1",
-      "aurelia-framework": "^1.0.0-rc.1.0.2",
+      "aurelia-framework": "^1.0.0-rc.1.0.2"
     },
     "devDependencies": {
       "traceur": "github:jmcriffey/bower-traceur@0.0.92",
